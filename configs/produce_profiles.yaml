@@ -1,0 +1,35 @@
+# Produce-specific thermal and operational profiles
+# Based on literature and paper empirical values
+profiles:
+  apple:
+    display_name: "Fresh Apple"
+    emissivity: 0.97
+    storage_temp_recommended_c: [0.0, 4.0]
+    packaging_type: "unwrapped"
+    packaging_transmittance: 1.00
+    expected_rmse_c: 0.63
+    cooling_halflife_sec: 2400
+
+  bell_pepper:
+    display_name: "Fresh Bell Pepper"
+    emissivity: 0.96
+    storage_temp_recommended_c: [7.0, 10.0]
+    packaging_type: "unwrapped"
+    packaging_transmittance: 1.00
+    expected_rmse_c: 0.81
+    varieties:
+      pepper_1: "Red Bell Pepper"
+      pepper_2: "Yellow Bell Pepper"
+      pepper_3: "Green Bell Pepper"
+    cooling_halflife_sec: 1800
+
+  broccoli:
+    display_name: "Individually Wrapped Broccoli"
+    emissivity: 0.95
+    packaging_type: "polyethylene_film_wrapped"
+    packaging_emissivity: 0.88
+    packaging_transmittance: 0.75
+    storage_temp_recommended_c: [0.0, 2.0]
+    expected_rmse_c: 1.86
+    cooling_halflife_sec: 1500
+    notes: "External wrap film reflects background IR radiation, requiring emissivity compensation."

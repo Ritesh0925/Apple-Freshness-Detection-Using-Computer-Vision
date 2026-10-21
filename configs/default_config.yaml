@@ -1,0 +1,50 @@
+system:
+  name: "RGB-Thermal Fresh Produce Surface Temperature Monitoring"
+  log_level: "INFO"
+  device: "raspberry_pi_4b"
+
+camera:
+  rgb:
+    module: "Raspberry Pi Camera Module v2"
+    native_resolution: [3280, 2464]
+    capture_resolution: [640, 480]
+    fps: 30
+  thermal:
+    module: "FLIR Lepton 3.5 (PureThermal 2 Smart I/O)"
+    native_resolution: [160, 120]
+    radiometric_scale: 100.0   # centiKelvin / 100 = Kelvin, then - 273.15 -> Celsius
+    fps: 7.0                   # Nominal capture rate reported in paper (~7 frames/sec)
+    spectral_range_um: [8.0, 14.0]
+    temperature_range_c: [-10.0, 140.0]
+
+fusion:
+  method: "homography_perspective"
+  ransac_reproj_threshold: 3.0
+  target_space: "thermal"      # Warp RGB to thermal space (160x120) or "rgb"
+  default_control_points:
+    # 4 corresponding corner/feature coordinates for top-down shelf view
+    src_rgb: [[50.0, 40.0], [590.0, 45.0], [580.0, 440.0], [60.0, 430.0]]
+    dst_ir:  [[15.0, 10.0], [145.0, 12.0], [140.0, 110.0], [18.0, 108.0]]
+
+detection:
+  detector_type: "efficientdet_tflite"
+  confidence_threshold: 0.50
+  nms_threshold: 0.40
+  supported_classes: ["apple", "bell_pepper", "broccoli", "produce"]
+
+roi:
+  grid_division: [7, 7]        # Partition bounding box into 7x7 sections as in paper
+  center_block_size: [7, 7]    # 7x7 pixel block at geometric center (49 pixels)
+  aggregation: "mean"          # Mean temperature over the 49 pixels
+
+temporal_filtering:
+  sampling_hz: 1.0             # 1 Hz aggregation to match thermocouple logger (Graphtec GL240)
+  moving_average_window: 5     # 5-second moving average window
+  deduplicate_timestamps: true
+
+calibration:
+  water_bath:
+    low_range_c: [0.0, 53.0]
+    high_range_c: [53.0, 100.0]
+    correction_slope: 0.985
+    correction_intercept: 0.15

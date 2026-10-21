@@ -1,0 +1,4 @@
+Sample,Trial_1_RMSE,Trial_1_MAE,Trial_1_R2,Trial_2_RMSE,Trial_2_MAE,Trial_2_R2,Trial_3_RMSE,Trial_3_MAE,Trial_3_R2
+Pepper 1 (Red),1.073,0.856,0.961,0.542,0.431,0.99,0.637,0.512,0.986
+Pepper 2 (Yellow),0.753,0.603,0.981,0.59,0.475,0.988,0.645,0.515,0.986
+Pepper 3 (Green),0.815,0.65,0.978,0.762,0.612,0.981,0.85,0.686,0.976
